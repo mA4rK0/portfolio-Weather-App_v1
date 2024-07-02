@@ -67,6 +67,7 @@ function defaultClass() {
 
 searchBtn.addEventListener("click", () => {
   if (searchBox.value !== "") {
+    cityDis.innerHTML = "Getting the data...";
     checkWeather(searchBox.value);
   }
 });
