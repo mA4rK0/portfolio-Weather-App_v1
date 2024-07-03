@@ -1,7 +1,7 @@
 const apiKey = "976738fbfb3c9578f1994b018302c20d";
 const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
 const cityDis = document.querySelector(".city");
-const weatherIcon = document.querySelector(".change i");
+const weatherIcon = document.querySelector(".change img");
 
 const searchBox = document.querySelector(".search input");
 const searchBtn = document.querySelector(".search button");
@@ -15,6 +15,7 @@ async function checkWeather(city) {
     };
 
     const res = await axios.get(`${apiUrl}${city}&appid=${apiKey}`, config);
+    console.log(res);
 
     const data = res.data;
     if (cityDis && weatherIcon) {
@@ -24,45 +25,19 @@ async function checkWeather(city) {
       document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
       document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
 
-      // * Clear previous weather icon classes
-      defaultClass();
+      // * Clear previous weather icon
+      weatherIcon.src = "https://openweathermap.org/img/wn/";
 
       // * change the weather icon
-      let changeIcon = data.weather[0].main;
-
-      switch (changeIcon) {
-        case "Clouds":
-          weatherIcon.classList.add("bi-clouds");
-          break;
-        case "Clear":
-          weatherIcon.classList.add("bi-brightness-high");
-          break;
-        case "Rain":
-          weatherIcon.classList.add("bi-cloud-rain-heavy");
-          break;
-        case "Drizzle":
-          weatherIcon.classList.add("bi-cloud-drizzle");
-          break;
-        case "Mist":
-          weatherIcon.classList.add("bi-cloud-sun");
-          break;
-        default:
-          weatherIcon.classList.add("bi-question-circle");
-          break;
-      }
+      let changeIcon = data.weather[0].icon;
+      weatherIcon.src = `https://openweathermap.org/img/wn/${changeIcon}.png`;
     }
   } catch (error) {
     console.error("An error occurred:", error);
     if (cityDis && weatherIcon) {
       cityDis.innerHTML = "Error! City not found.";
-      defaultClass();
-      weatherIcon.classList.add("bi-ban");
     }
   }
-}
-
-function defaultClass() {
-  weatherIcon.className = "weather-icon bi d-flex justify-content-center mt-4";
 }
 
 searchBtn.addEventListener("click", () => {
